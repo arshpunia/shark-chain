@@ -26,12 +26,12 @@ def proof_of_work(UserFile):
     print(potential_hash)
     return potential_hash
 
-def add_to_ledger(ledger_file, hashcode):
+def mine(ledger_file, hashcode):
     with open(ledger_file,'a+') as f:
         f.write(hashcode+"\n")
 
 
-def mine(ledgerfile):
+def count_balance(ledgerfile):
     line_count = 0
     with open(ledgerfile,'r') as f:
         file_lines = f.readlines()
@@ -42,12 +42,3 @@ def mine(ledgerfile):
     return line_count
 
 
-def main():
-    
-    ##add_to_ledger('shc.txt',proof_of_work('tst_tasks.txt'))
-    ##mine('shc.txt')
-    read_file_test('tst_tasks.txt')
-    
-if __name__=="__main__":
-    main()
-         
