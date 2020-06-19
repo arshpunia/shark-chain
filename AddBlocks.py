@@ -21,7 +21,7 @@ def proof_of_work(UserFile):
         block_appended = block_appended[:-1]+str(nonce)
         potential_hash = compute_block_hash(block_appended)
         
-        ##Need to figure a way out for the proof of work
+        
     print("The hash was calculated after "+str(nonce)+" tries")
     print(potential_hash)
     return potential_hash
@@ -40,11 +40,13 @@ def mine(ledgerfile):
     
     print(str(line_count))
     return line_count
-    
+
+
 def main():
-    ##proof_of_work('tst_tasks.txt')
-    add_to_ledger('shc.txt',proof_of_work('tst_tasks.txt'))
-    mine('shc.txt')
+    
+    ##add_to_ledger('shc.txt',proof_of_work('tst_tasks.txt'))
+    ##mine('shc.txt')
+    read_file_test('tst_tasks.txt')
     
 if __name__=="__main__":
     main()
