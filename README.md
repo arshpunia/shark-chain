@@ -1,2 +1,2 @@
 # shark-chain
-A blockchain based productivity solution 
+A blockchain based work-tracking solution 
