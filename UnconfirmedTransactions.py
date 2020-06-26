@@ -1,6 +1,10 @@
+from dotenv import load_dotenv
+import os
 ##uct: unconfirmed transaction
+
 def add_uct(task):
-    uct_file = 'shc-uct.txt'
+    load_dotenv()
+    uct_file = os.getenv('UNCONFIRMED_TRANSACTION_FILE')
     
     with open(uct_file,'a+') as uf:
         uf.write(task+"\n")
@@ -14,7 +18,7 @@ def is_possible_block(uct_file):
         file_lines = f.readlines()
         for line in file_lines:
             line_count+=1
-    
+    ##f.close()
     ##print(str(line_count))
     if line_count == 5:
         is_block = True
