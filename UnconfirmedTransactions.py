@@ -5,11 +5,28 @@ import os
 def add_uct(task):
     load_dotenv()
     uct_file = os.getenv('UNCONFIRMED_TRANSACTION_FILE')
+    task_file = os.getenv('TASK_FILE')
+    task_uct_file = os.getenv('UNCONFIRMED_TASK_TRANSACTION_FILE')
     
-    with open(uct_file,'a+') as uf:
-        uf.write(task+"\n")
-        
-    uf.close()
+    ##Checking if the task is in the task file.
+    ##If yes, it is pushed to the another file, also known as the unconfirmed task transaction file. 
+    ##Daily tasks are processed independently of other tasks. This aids analysis of overall efficiency. 
+    
+    with open(task_file, 'r') as tf:
+        if task in tf.read():
+            print("task from task file found")
+            with open(task_uct_file,'a+') as tuf:
+                tuf.write(task+"\n")
+            tuf.close()
+        else:
+            with open(uct_file,'a+') as uf:
+                uf.write(task+"\n")
+            
+            uf.close()
+    
+    tf.close()
+    
+
     
 def is_possible_block(uct_file):
     line_count=0
@@ -24,4 +41,7 @@ def is_possible_block(uct_file):
         is_block = True
     
     return is_block
+    
+
+
 
