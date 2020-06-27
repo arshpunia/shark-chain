@@ -14,7 +14,7 @@ def add_uct(task):
     
     with open(task_file, 'r') as tf:
         if task in tf.read():
-            print("task from task file found")
+            print("Task from task file found")
             with open(task_uct_file,'a+') as tuf:
                 tuf.write(task+"\n")
             tuf.close()
@@ -31,6 +31,12 @@ def add_uct(task):
 def is_possible_block(uct_file):
     line_count=0
     is_block = False    
+    
+    ##Creating file if one does not already exist 
+    
+    if not os.path.exists(uct_file):
+        open(uct_file,"w")
+    
     with open(uct_file,'r') as f:
         file_lines = f.readlines()
         for line in file_lines:
