@@ -17,12 +17,14 @@ def shc_ecosystem(completed_task):
     if uct.is_possible_block(uct_file):
         print("5 transactions recorded! Will now start mining process")
         ab.mine(mined_file,ab.proof_of_work(uct_file))
+        print("Mining process complete")
         os.remove(uct_file)
     
     if uct.is_possible_block(task_uct_file):
         print("5 work-related transactions recorded! will now start mining process")
         ab.mine(mined_file,ab.proof_of_work(uct_file))
         print("Mining process complete")
+        os.remove(task_uct_file)
     
 def main():
     shc_ecosystem(sys.argv[1])
