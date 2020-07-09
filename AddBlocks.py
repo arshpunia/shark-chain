@@ -33,7 +33,7 @@ def proof_of_work(UserFile):
 def mine(ledger_file, hashcode):
     with open(ledger_file,'a+') as f:
         f.write(hashcode+"\n")
-    deposit_shc()
+    ##deposit_shc()
 
 def deposit_shc():
     load_dotenv()

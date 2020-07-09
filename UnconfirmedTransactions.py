@@ -1,6 +1,23 @@
 from dotenv import load_dotenv
 import os
+import AnalyticsDb as adb
 ##uct: unconfirmed transaction
+
+def mark_aux_task_unconfirmed(task):
+    cn = adb.connect_to_db()
+    cursor = cn.cursor()
+    update_command = "UPDATE auxiliary_tasks SET is_completed = True WHERE task_description = (%s)"
+    sql_val = (task,)
+    cursor.execute(update_command,sql_val)
+    cn.commit()    
+
+def mark_work_task_unconfirmed(task):
+    cn = adb.connect_to_db()
+    cursor = cn.cursor()
+    update_command = "UPDATE work_tasks SET is_completed = True WHERE task_description = (%s)"
+    sql_val = (task,)
+    cursor.execute(update_command,sql_val)
+    cn.commit()    
 
 def add_uct(task):
     load_dotenv()
@@ -50,6 +67,10 @@ def mark_task_as_done(task,task_file_lines,tf):
             tf.write("[x]"+line)
     
  
+def is_possible_block():
+    load_dotenv()
+    
+
     
 def is_possible_block(uct_file):
     line_count=0
@@ -72,5 +93,8 @@ def is_possible_block(uct_file):
     return is_block
     
 
-
+def main():
+    mark_work_task_unconfirmed('archive management')
+if __name__ == "__main__":
+    main()
 
