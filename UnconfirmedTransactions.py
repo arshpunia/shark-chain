@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 import AnalyticsDb as adb
+from datetime import datetime 
 ##uct: unconfirmed transaction
 
 def mark_aux_task_unconfirmed(task):
@@ -19,6 +20,36 @@ def mark_work_task_unconfirmed(task):
     cursor.execute(update_command,sql_val)
     cn.commit()    
 
+def add_uct(completed_task):
+    load_dotenv()
+    task_file = os.getenv('TASK_FILE')
+    
+    cn = adb.connect_to_db()
+    cursor = cn.cursor()
+    t_date = datetime.now().strftime('%Y-%m-%d')
+    print(str(t_date))
+    query_work_tasks = "SELECT * FROM work_tasks WHERE date = (%s)"
+    sql_val = (t_date,)
+    cursor.execute(query_work_tasks, sql_val)
+    
+    query_result = cursor.fetchall()
+    todays_work_tasks = []
+    for row in query_result:
+        todays_work_tasks.append(row[2])
+        
+    
+    
+    task_is_work_related = False 
+    for work_task in todays_work_tasks:
+        if work_task == completed_task:
+            task_is_work_related = True
+            mark_work_task_unconfirmed(completed_task)
+            break
+     
+    if task_is_work_related == False:
+        mark_aux_task_unconfirmed(completed_task)
+
+"""       
 def add_uct(task):
     load_dotenv()
     uct_file = os.getenv('UNCONFIRMED_TRANSACTION_FILE')
@@ -50,7 +81,7 @@ def add_uct(task):
         uf.close()
             
     
-
+"""
 def mark_task_as_done(task,task_file_lines,tf):
 
     load_dotenv()
@@ -94,7 +125,7 @@ def is_possible_block(uct_file):
     
 
 def main():
-    mark_work_task_unconfirmed('archive management')
+    add_uct('analytics engine')
 if __name__ == "__main__":
     main()
 
