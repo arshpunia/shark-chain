@@ -12,14 +12,11 @@ def compute_block_hash(contents):
     return block_hash
 
 
-def proof_of_work(UserFile):
-    
-    with open(UserFile,'r') as task_file:
-        user_tasks  = task_file.read()
-    
+def proof_of_work(tasks):
+        
     nonce = 0
-    block_appended = user_tasks+str(nonce)
-    potential_hash = compute_block_hash(user_tasks)
+    block_appended = tasks+str(nonce)
+    potential_hash = compute_block_hash(tasks)
     while not potential_hash.startswith('0' * 2):
         nonce += 1
         block_appended = block_appended[:-1]+str(nonce)

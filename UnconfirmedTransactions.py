@@ -1,18 +1,10 @@
 from dotenv import load_dotenv
 import os
 import AnalyticsDb as adb
+import AddBlocks as blocks
 from datetime import datetime 
 ##uct: unconfirmed transaction
-
    
-
-def mark_work_task_unconfirmed(task):
-    cn = adb.connect_to_db()
-    cursor = cn.cursor()
-    update_command = "UPDATE work_tasks SET is_completed = True WHERE task_description = (%s)"
-    sql_val = (task,)
-    cursor.execute(update_command,sql_val)
-    cn.commit()    
 
 def return_work_tasks_list():
     cn = adb.connect_to_db()
@@ -30,14 +22,14 @@ def return_work_tasks_list():
     
     return todays_work_tasks
     
-def add_wuct(completed_work_task):
+def mark_wuct(completed_work_task):
     ##Marks a work-related task as completed, but unconfirmed
     todays_work_tasks = return_work_tasks_list()
     task_is_work_related = False 
     for work_task in todays_work_tasks:
         if work_task == completed_work_task:
             task_is_work_related = True
-            mark_work_task_unconfirmed(completed_work_task)
+            adb.update_completed_work_task(completed_work_task)
             print(completed_work_task+" was found and has been marked as completed!")
             break
     if task_is_work_related == False:
@@ -55,59 +47,15 @@ def add_auct(completed_aux_task):
     if task_is_work_related == False:
         adb.insert_auxiliary_task(completed_aux_task)
 
-"""       
-def add_uct(task):
-    load_dotenv()
-    uct_file = os.getenv('UNCONFIRMED_TRANSACTION_FILE')
-    task_file = os.getenv('TASK_FILE')
-    task_uct_file = os.getenv('UNCONFIRMED_TASK_TRANSACTION_FILE')
-    
-    ##Checking if the task is in the task file.
-    ##If yes, it is pushed to the another file, also known as the unconfirmed task transaction file. 
-    ##Daily tasks are processed independently of other tasks. This aids analysis of overall efficiency. 
-    task_found = False
-    with open(task_file,"r+") as tf:
-        task_file_lines = tf.readlines()
-        for line in task_file_lines:
-            if line.strip('\n') == task:
-                task_found = True
-                print("Task from task file found")
-                with open(task_uct_file,'a+') as tuf:
-                    tuf.write(task+"\n")
-                tuf.close()
-                with open(task_file,"w") as tfe:
-                    mark_task_as_done(line,task_file_lines,tfe)
-                break
-    tf.close()
-    
-    if not task_found:
-        with open(uct_file,'a+') as uf:
-            uf.write(task+"\n")
-            
-        uf.close()
-            
-    
-"""
-def mark_task_as_done(task,task_file_lines,tf):
-
-    load_dotenv()
-    uct_file = os.getenv('UNCONFIRMED_TRANSACTION_FILE')
-    task_file = os.getenv('TASK_FILE')
-    task_uct_file = os.getenv('UNCONFIRMED_TASK_TRANSACTION_FILE')
-
-
-    for line in task_file_lines:
-        if line != task:
-            tf.write(line)
-        else:
-            print("Marking transaction as done!")
-            tf.write("[x]"+line)
-    
- 
-def is_possible_block():
-    load_dotenv()
-    
-
+def mine_work_block(uct_list):
+    ##Putting the strings all together
+    combined_string = ""
+    for work_task in uct_list:
+        combined_string = combined_string + work_task
+    ##Proof of work
+    computed_hash = blocks.proof_of_work(combined_string)
+    adb.add_block_to_ledger_database(computed_hash)
+    adb.ledgerify_block(uct_list)
     
 def is_possible_block(uct_file):
     line_count=0
@@ -131,7 +79,11 @@ def is_possible_block(uct_file):
     
 
 def main():
-    add_auct('aws')
+    is_block, w_list = adb.check_for_work_task_block()
+    if is_block:
+        mine_work_block(w_list)
+    else:
+        print("keeep going soldier")
 if __name__ == "__main__":
     main()
 

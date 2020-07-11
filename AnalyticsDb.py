@@ -38,6 +38,39 @@ def query_daily_report():
     
     for row in result:
         print(row[0])
+
+def check_for_work_task_block():
+    cn = connect_to_db()
+    cursor = cn.cursor()
+    t_date = datetime.now().strftime("%Y-%m-%d")
+    block_query = "SELECT * FROM work_tasks WHERE date = (%s) AND is_completed = (%s) AND added_to_ledger = (%s)"
+    query_parameters = (t_date, True,False)
+    cursor.execute(block_query,query_parameters)
+    query_result = cursor.fetchall()
+    wuct_list = []
+    is_block = False
+    for task in query_result:
+        wuct_list.append(task[2])
+    
+    if len(wuct_list) == 5:
+        is_block = True 
+    
+    return (is_block, wuct_list)
+
+def ledgerify_work_task(work_task):
+    """
+    Marks the added_to_ledger column for work_task as True. 
+    """
+    cn = connect_to_db()
+    cursor = cn.cursor()
+    update_command = "UPDATE work_tasks SET added_to_ledger = True WHERE task_description = (%s)"
+    sql_params = (work_task,)
+    cursor.execute(update_command, sql_params)
+    cn.commit()
+
+def ledgerify_block(uct_list):
+    for task in uct_list:
+        ledgerify_work_task(task)
     
 def insert_work_task(task):
     """
@@ -51,7 +84,25 @@ def insert_work_task(task):
     vals = (today_date,time_now,task,False,False)
     cursor.execute(insertion_command, vals)
     cn.commit()
+
+def add_block_to_ledger_database(hashcode):
     
+    cn = connect_to_db()
+    cursor = cn.cursor()
+    today_date = datetime.now().strftime("%Y-%m-%d")
+    time_now = datetime.now().strftime("%H:%M:%S")
+    ledger_insertion_command = "INSERT INTO hash_records VALUES (%s,%s,%s,%s)"
+    insertion_values = (today_date, time_now, hashcode, str(1))
+    cursor.execute(ledger_insertion_command, insertion_values)
+    cn.commit()
+
+def update_completed_work_task(task):
+    cn = connect_to_db()
+    cursor = cn.cursor()
+    update_command = "UPDATE work_tasks SET is_completed = True WHERE task_description = (%s)"
+    sql_val = (task,)
+    cursor.execute(update_command,sql_val)
+    cn.commit()     
     
 def  populate_work_task_table():
     load_dotenv()
@@ -63,8 +114,6 @@ def  populate_work_task_table():
             insert_work_task(line.strip('\n'))
 
 def main():
-    ##query_daily_report()
-    ##insert_additional_task("Wrote additional task insertion method")
-    populate_work_task_table()
+    check_for_work_task_block()
 if __name__ == "__main__":
     main()
