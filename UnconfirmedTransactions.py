@@ -4,13 +4,7 @@ import AnalyticsDb as adb
 from datetime import datetime 
 ##uct: unconfirmed transaction
 
-def mark_aux_task_unconfirmed(task):
-    cn = adb.connect_to_db()
-    cursor = cn.cursor()
-    update_command = "UPDATE auxiliary_tasks SET is_completed = True WHERE task_description = (%s)"
-    sql_val = (task,)
-    cursor.execute(update_command,sql_val)
-    cn.commit()    
+   
 
 def mark_work_task_unconfirmed(task):
     cn = adb.connect_to_db()
@@ -24,7 +18,7 @@ def return_work_tasks_list():
     cn = adb.connect_to_db()
     cursor = cn.cursor()
     t_date = datetime.now().strftime('%Y-%m-%d')
-    print(str(t_date))
+    
     query_work_tasks = "SELECT * FROM work_tasks WHERE date = (%s)"
     sql_val = (t_date,)
     cursor.execute(query_work_tasks, sql_val)
@@ -33,31 +27,33 @@ def return_work_tasks_list():
     todays_work_tasks = []
     for row in query_result:
         todays_work_tasks.append(row[2])
-
+    
+    return todays_work_tasks
+    
 def add_wuct(completed_work_task):
     ##Marks a work-related task as completed, but unconfirmed
     todays_work_tasks = return_work_tasks_list()
     task_is_work_related = False 
     for work_task in todays_work_tasks:
-        if work_task == completed_task:
+        if work_task == completed_work_task:
             task_is_work_related = True
-            mark_work_task_unconfirmed(completed_task)
+            mark_work_task_unconfirmed(completed_work_task)
             print(completed_work_task+" was found and has been marked as completed!")
             break
     if task_is_work_related == False:
-        print("Could not find "+completed_work_task+" in the database.\nHere are a few suggestions:\n-->Check if the work task was actually added to the database\n-->Maybe "+completed_work_task+" is an auxiliary task?"
+        print("Could not find "+completed_work_task+" in the database.\nHere are a few suggestions:\n--> Check if the work task was actually added to the database\n--> Maybe "+completed_work_task+" is an auxiliary task?")
 
-def add_uct(completed_task):
+def add_auct(completed_aux_task):
     todays_work_tasks = return_work_tasks_list()
     task_is_work_related = False 
     for work_task in todays_work_tasks:
-        if work_task == completed_task:
+        if work_task == completed_aux_task:
             task_is_work_related = True
-            mark_work_task_unconfirmed(completed_task)
+            print("\'"+completed_aux_task+"\' is a work-related task. Please invoke the script as SharkCoin.py -w \'"+completed_aux_task+"\'\nTask was not marked as unconfirmed")
             break
      
     if task_is_work_related == False:
-        mark_aux_task_unconfirmed(completed_task)
+        adb.insert_auxiliary_task(completed_aux_task)
 
 """       
 def add_uct(task):
@@ -135,7 +131,7 @@ def is_possible_block(uct_file):
     
 
 def main():
-    add_wuct('loda mera')
+    add_auct('aws')
 if __name__ == "__main__":
     main()
 

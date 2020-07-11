@@ -18,13 +18,13 @@ def connect_to_db():
     
     return mydb
 
-def insert_additional_task(task_description):
+def insert_auxiliary_task(task_description):
     cn = connect_to_db()
     cursor = cn.cursor()
-    insertion_command = "INSERT INTO additional_tasks (date, time, task_description) VALUES (%s,%s,%s)"
+    insertion_command = "INSERT INTO auxiliary_tasks (date, time, task_description,is_completed,added_to_ledger) VALUES (%s,%s,%s,%s,%s)"
     today_date = datetime.now().strftime("%Y-%m-%d")
     time_now = datetime.now().strftime("%H:%M:%S")
-    vals = (today_date, time_now, task_description)
+    vals = (today_date, time_now, task_description,True,False)
     cursor.execute(insertion_command,vals)
     cn.commit()
     
