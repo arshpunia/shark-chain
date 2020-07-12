@@ -47,15 +47,15 @@ def add_auct(completed_aux_task):
     if task_is_work_related == False:
         adb.insert_auxiliary_task(completed_aux_task)
 
-def mine_work_block(uct_list):
+def mine_block(uct_list, table_name):
     ##Putting the strings all together
     combined_string = ""
     for work_task in uct_list:
         combined_string = combined_string + work_task
     ##Proof of work
     computed_hash = blocks.proof_of_work(combined_string)
+    adb.ledgerify_block(uct_list,table_name)
     adb.add_block_to_ledger_database(computed_hash)
-    adb.ledgerify_block(uct_list)
     
 def is_possible_block(uct_file):
     line_count=0
@@ -79,9 +79,9 @@ def is_possible_block(uct_file):
     
 
 def main():
-    is_block, w_list = adb.check_for_work_task_block()
+    is_block, a_list = adb.check_for_auxiliary_task_block()
     if is_block:
-        mine_work_block(w_list)
+        mine_block(a_list,'auxiliary_tasks')
     else:
         print("keeep going soldier")
 if __name__ == "__main__":
