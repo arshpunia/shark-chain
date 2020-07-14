@@ -92,10 +92,11 @@ def ledgerify_block(uct_list, table_name):
     for task in uct_list:
         ledgerify_task(task, table_name)
     
+"""
 def insert_work_task(task):
-    """
-    Inserts a work-related task into the work_tasks table
-    """
+    
+    ##Inserts a work-related task into the work_tasks table
+    
     cn = connect_to_db()
     cursor = cn.cursor()
     insertion_command = "INSERT INTO work_tasks (date, time, task_description, is_completed, added_to_ledger) VALUES (%s,%s,%s,%s,%s)"
@@ -104,8 +105,17 @@ def insert_work_task(task):
     vals = (today_date,time_now,task,False,False)
     cursor.execute(insertion_command, vals)
     cn.commit()
-
-
+"""
+def insert_work_task(date, time, task):
+    cn = connect_to_db()
+    cursor = cn.cursor()
+    insertion_command = "INSERT INTO work_tasks (date, time, task_description, is_completed, added_to_ledger) VALUES (%s,%s,%s,%s,%s)"
+    ##task_date = date.strftime("%Y-%m-%d")
+    task_date = date
+    task_time = time 
+    vals = (task_date,task_time,task,False,False)
+    cursor.execute(insertion_command, vals)
+    cn.commit()
 
 def update_completed_work_task(task):
     cn = connect_to_db()
@@ -115,15 +125,17 @@ def update_completed_work_task(task):
     cursor.execute(update_command,sql_val)
     cn.commit()     
     
-def  populate_work_task_table():
-    load_dotenv()
-    task_file = os.getenv('TASK_FILE')
-    
+def  populate_work_task_table(date, time, task_file):
+    print("Populating work_tasks table with "+task_file+"...")
+    ##task_file = os.getenv('TASK_FILE')
+    print("Tasks pertain to "+date)
     with open(task_file) as tf:
         file_lines = tf.readlines()
         for line in file_lines:
-            insert_work_task(line.strip('\n'))
-
+            
+            insert_work_task(date, time,line.strip('\n'))
+    
+    print("Updated work_tasks table!")
 def add_block_to_ledger_database(hashcode):
     
     cn = connect_to_db()
