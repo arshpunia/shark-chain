@@ -43,8 +43,8 @@ def check_for_work_task_block():
     cn = connect_to_db()
     cursor = cn.cursor()
     t_date = datetime.now().strftime("%Y-%m-%d")
-    block_query = "SELECT * FROM work_tasks WHERE date = (%s) AND is_completed = (%s) AND added_to_ledger = (%s)"
-    query_parameters = (t_date, True,False)
+    block_query = "SELECT * FROM work_tasks WHERE is_completed = (%s) AND added_to_ledger = (%s)"
+    query_parameters = (True,False)
     cursor.execute(block_query,query_parameters)
     query_result = cursor.fetchall()
     wuct_list = []
@@ -83,8 +83,8 @@ def ledgerify_task(task, table_name):
     cn = connect_to_db()
     cursor = cn.cursor()
     t_date = datetime.now().strftime("%Y-%m-%d")
-    update_command = "UPDATE "+table_name +" SET added_to_ledger = True WHERE task_description = (%s) AND date = (%s)"
-    sql_params = (task,t_date)
+    update_command = "UPDATE "+table_name +" SET added_to_ledger = True WHERE task_description = (%s) AND is_completed = (%s) AND added_to_ledger = (%s)"
+    sql_params = (task,True, False)
     cursor.execute(update_command, sql_params)
     cn.commit()
 
@@ -120,8 +120,9 @@ def insert_work_task(date, time, task):
 def update_completed_work_task(task):
     cn = connect_to_db()
     cursor = cn.cursor()
-    update_command = "UPDATE work_tasks SET is_completed = True WHERE task_description = (%s)"
-    sql_val = (task,)
+    t_date = datetime.now().strftime("%Y-%m-%d")
+    update_command = "UPDATE work_tasks SET is_completed = True WHERE task_description = (%s) AND date = (%s)"
+    sql_val = (task,t_date)
     cursor.execute(update_command,sql_val)
     cn.commit()     
     
