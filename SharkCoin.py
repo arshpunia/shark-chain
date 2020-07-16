@@ -1,6 +1,6 @@
 import UnconfirmedTransactions as uct
 import AddBlocks as ab
-import AnalyticsDb as adb
+import SqlTableMgmt as stm
 import sys
 import os 
 from dotenv import load_dotenv
@@ -30,9 +30,9 @@ def shc_ecosystem(completed_task):
 
 def shc_work_ecosystem(completed_task):
     uct.mark_wuct(completed_task)
-    is_block, w_list = adb.check_for_work_task_block()
+    is_block, w_list = stm.check_for_work_task_block()
     if is_block:
-        uct.mine_block(w_list,'work_tasks')
+        uct.mine_work_block(w_list,'work_tasks')
     else:
     
         print(str(len(w_list))+" unconfirmed work tasks currently awaiting addition to the ledger")
@@ -42,7 +42,7 @@ def shc_work_ecosystem(completed_task):
 def shc_aux_ecosystem(completed_task):
     
     uct.add_auct(completed_task)
-    is_block, a_list = adb.check_for_auxiliary_task_block()
+    is_block, a_list = stm.check_for_auxiliary_task_block()
     if is_block:
         uct.mine_block(a_list,'auxiliary_tasks')
     else:
@@ -71,7 +71,7 @@ def invoke_shc(flag, task):
     elif flag == "-t":
         t_date = datetime.now().strftime("%Y-%m-%d")
         time_now = datetime.now().strftime("%H:%M:%S")
-        adb.populate_work_task_table(t_date, time_now, task)
+        stm.populate_work_task_table(t_date, "00:00:00", task)
     else:
         print("Unsupported flag\nPlease use one of the supported flags as follows: ")
         print("--> -w <work-task-name>")
@@ -85,7 +85,7 @@ def main():
     
     elif len(sys.argv) == 4 and sys.argv[1] == "-ft" and len(sys.argv[2]) == 10:
         if validate_date_string(sys.argv[2]):
-            adb.populate_work_task_table(sys.argv[2],"00:00:00",sys.argv[3])
+            stm.populate_work_task_table(sys.argv[2],"00:00:00",sys.argv[3])
         else:
             print("Improper invocation\nPlease invoke  future task mode as: ")
             print("--> -ft <YYYY-MM-DD> <work-target-file>")

@@ -1,13 +1,13 @@
 from dotenv import load_dotenv
 import os
-import AnalyticsDb as adb
+import SqlTableMgmt as stm
 import AddBlocks as blocks
 from datetime import datetime 
 ##uct: unconfirmed transaction
    
 
 def return_work_tasks_list():
-    cn = adb.connect_to_db()
+    cn = stm.connect_to_db()
     cursor = cn.cursor()
     t_date = datetime.now().strftime('%Y-%m-%d')
     
@@ -29,7 +29,7 @@ def mark_wuct(completed_work_task):
     for work_task in todays_work_tasks:
         if work_task == completed_work_task:
             task_is_work_related = True
-            adb.update_completed_work_task(completed_work_task)
+            stm.update_completed_work_task(completed_work_task)
             print(completed_work_task+" was found and has been marked as completed!")
             break
     if task_is_work_related == False:
@@ -45,7 +45,17 @@ def add_auct(completed_aux_task):
             break
      
     if task_is_work_related == False:
-        adb.insert_auxiliary_task(completed_aux_task)
+        stm.insert_auxiliary_task(completed_aux_task)
+
+def mine_work_block(uct_list, table_name):
+    ##Putting the strings all together
+    combined_string = ""
+    for work_task in uct_list:
+        combined_string = combined_string + work_task
+    ##Proof of work
+    computed_hash = blocks.work_pow(combined_string)
+    stm.ledgerify_block(uct_list,table_name)
+    stm.add_block_to_ledger_database(computed_hash)
 
 def mine_block(uct_list, table_name):
     ##Putting the strings all together
@@ -54,8 +64,8 @@ def mine_block(uct_list, table_name):
         combined_string = combined_string + work_task
     ##Proof of work
     computed_hash = blocks.proof_of_work(combined_string)
-    adb.ledgerify_block(uct_list,table_name)
-    adb.add_block_to_ledger_database(computed_hash)
+    stm.ledgerify_block(uct_list,table_name)
+    stm.add_block_to_ledger_database(computed_hash)
     
 def is_possible_block(uct_file):
     line_count=0
@@ -79,7 +89,7 @@ def is_possible_block(uct_file):
     
 
 def main():
-    is_block, a_list = adb.check_for_auxiliary_task_block()
+    is_block, a_list = stm.check_for_auxiliary_task_block()
     if is_block:
         mine_block(a_list,'auxiliary_tasks')
     else:

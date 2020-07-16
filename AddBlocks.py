@@ -11,13 +11,26 @@ def compute_block_hash(contents):
     block_hash = sha256(contents.encode()).hexdigest()
     return block_hash
 
-
+def work_pow(tasks):
+    nonce = 0
+    block_appended = tasks+str(nonce)
+    potential_hash = compute_block_hash(tasks)
+    while not potential_hash.startswith('3' * 3):
+        nonce += 1
+        block_appended = block_appended[:-1]+str(nonce)
+        potential_hash = compute_block_hash(block_appended)
+        
+        
+    print("The hash was calculated after "+str(nonce)+" tries")
+    print(potential_hash)
+    return potential_hash
+    
 def proof_of_work(tasks):
         
     nonce = 0
     block_appended = tasks+str(nonce)
     potential_hash = compute_block_hash(tasks)
-    while not potential_hash.startswith('0' * 2):
+    while not potential_hash.startswith('1' * 3):
         nonce += 1
         block_appended = block_appended[:-1]+str(nonce)
         potential_hash = compute_block_hash(block_appended)
