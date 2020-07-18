@@ -157,9 +157,41 @@ def update_time_metrics_table():
 
 ##*****************************Methods for ratio_metrics***************************
 
+def insert_ratios(wct_ratio, apw_ratio): ##wct = work completed to targeted; apw = aux per work 
+    cn = stm.connect_to_db()
+    cursor = cn.cursor()
+    sql_insertion_statement = "INSERT INTO ratio_metrics VALUES (NOW(), %s, %s)"
+    sql_vals = (wct_ratio, apw_ratio)
+    cursor.execute(sql_insertion_statement, sql_vals)
+    cn.commit()
+    
+def update_ratios():
+    cn = stm.connect_to_db()
+    cursor = cn.cursor()
+    
+    sql_query_statement = "SELECT * FROM task_metrics WHERE date = (%s)"
+    t_date = datetime.now().strftime("%Y-%m-%d")
+    sql_vals = (t_date,)
+    cursor.execute(sql_query_statement, sql_vals)
+    query_result = cursor.fetchall()
+    wct = 0
+    apw = 0
+    if len(query_result) == 1:
+        work_target = int(query_result[0][1])
+        work_completed = int(query_result[0][2])
+        aux_completed = int(query_result[0][3])
+        
+        wct = work_completed/work_target
+        apw = aux_completed/work_completed
+        insert_ratios(wct, apw)
+    else:
+        print("Validation error")
+    
+
+    
 
 def main():
-    insert_task_metric()
+    update_ratios()
     ##update_time_metrics_table()
     
 if __name__ == "__main__":
