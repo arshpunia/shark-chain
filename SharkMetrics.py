@@ -1,4 +1,6 @@
 import AnalyticsEngine as ae 
+import SqlTableMgmt as stm
+from datetime import datetime
 
 def update_metrics_tables():
     """
@@ -16,9 +18,25 @@ def clear_metrics_tables(): ##Clears todays recrods from the respective metrics 
 def run_report():
     clear_metrics_tables()
     update_metrics_tables()
+
+#####Query Methods
+
+def query_task_metrics():
+    cn = stm.connect_to_db()
+    cursor = cn.cursor()
+    t_date = datetime.now().strftime("%Y-%m-%d")
+    sql_query_task_metrics = "SELECT * FROM task_metrics WHERE date = (%s)"
+    sql_query_value = (t_date, )
+    cursor.execute(sql_query_task_metrics, sql_query_value)
+    
+    query_result = cursor.fetchall()
+    if len(query_result) == 1:
+        print("Work tasks targeted: "+query_result[0][1])
+    
+    
     
 def main():
-    run_report()
-        
+    ##run_report()
+    query_task_metrics()    
 if __name__ == "__main__":
     main()
