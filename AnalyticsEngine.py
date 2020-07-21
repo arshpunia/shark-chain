@@ -3,7 +3,7 @@ from datetime import datetime
 
 ##----------Methods for the task_metrics table--------------
 
-def  get_work_tasks_targeted():
+def get_work_tasks_targeted():
     cn = stm.connect_to_db()
     cursor = cn.cursor()
     query_statement = "SELECT COUNT(*) FROM work_tasks WHERE date = (%s)"
@@ -13,7 +13,7 @@ def  get_work_tasks_targeted():
     
     query_result = cursor.fetchall()
     num_targeted = query_result[0][0]
-    
+   
     return num_targeted
     
 def get_work_tasks_achieved():
@@ -77,18 +77,33 @@ def get_coins_from_aux_tasks():
     return num_aux_coins   
 
 def insert_task_metric():
+    "Initializing task metrics analysis...."
     num_work_targets = get_work_tasks_targeted()
+    print(str(num_work_targets)+" work tasks were targeted")
     num_work_achieved = get_work_tasks_achieved()
+    print(str(num_work_achieved)+ " work tasks were achieved")
     num_aux_tasks = get_aux_tasks_achieved()
+    print(str(num_aux_tasks)+" auxiliary tasks were completed")
     num_work_coins = get_coins_from_work()
+    print(str(num_work_coins)+" SharkCoins were earned from completing work-related tasks")
     num_aux_coins = get_coins_from_aux_tasks()
-    
+    print(str(num_aux_coins) + " SharkCoins were earned from completing work-related tasks")
     cn = stm.connect_to_db()
     cursor = cn.cursor()
     t_date = datetime.now().strftime("%Y-%m-%d")
     sql_insertion_statement = "INSERT INTO task_metrics VALUES (%s,%s,%s,%s,%s,%s)"
     sql_vals = (t_date, num_work_targets, num_work_achieved, num_aux_tasks, num_work_coins, num_aux_coins)
     cursor.execute(sql_insertion_statement,sql_vals)
+    cn.commit()
+    print("Completed task metrics analysis!")
+    
+def delete_todays_metrics():
+    cn = stm.connect_to_db()
+    cursor = cn.cursor()
+    t_date = datetime.now().strftime("%Y-%m-%d")
+    sql_deletion_statement = "DELETE FROM task_metrics WHERE date = (%s)"
+    sql_deletion_value = (t_date, )
+    cursor.execute(sql_deletion_statement, sql_deletion_value)
     cn.commit()
 
 ##*******************Methods for time metrics********************
@@ -146,11 +161,23 @@ def insert_time_metric(time, work_metric, aux_metric):
     cn.commit()
 
 def update_time_metrics_table():
+    print("Initializing time metrics analysis....")
     aux_metrics = get_aux_time_metrics()
     work_metrics = get_work_time_metrics()
     time_list = aux_metrics.keys()
     for timestamp in time_list:
         insert_time_metric(timestamp,work_metrics[timestamp],aux_metrics[timestamp])
+    
+    print("Completed time metrics analysis!")
+def delete_todays_time_metrics():
+    cn = stm.connect_to_db()
+    cursor = cn.cursor()
+    t_date = datetime.now().strftime("%Y-%m-%d")
+    sql_deletion_statement = "DELETE FROM time_metrics WHERE date = (%s)"
+    sql_deletion_value = (t_date, )
+    cursor.execute(sql_deletion_statement, sql_deletion_value)
+    cn.commit()
+    
 
 ##*****************************Methods for ratio_metrics***************************
 
@@ -174,12 +201,25 @@ def update_ratios():
     wct = 0
     apw = 0
     if len(query_result) == 1:
+        print("Initializing ratio metrics analysis....")
         work_target = int(query_result[0][1])
         work_completed = int(query_result[0][2])
         aux_completed = int(query_result[0][3])
         
         wct = work_completed/work_target
+        print(str(wct) +" is the wct ratio")
         apw = aux_completed/work_completed
+        print(str(apw)+" is the apw ratio")
         insert_ratios(wct, apw)
+        print("Completed ratio metrics analysis!")
     else:
-        print("Validation error")
+        print("Validation error. Please check the table for any duplicate records from today and delete them")
+
+def delete_todays_ratio_metrics():
+    cn = stm.connect_to_db()
+    cursor = cn.cursor()
+    t_date = datetime.now().strftime("%Y-%m-%d")
+    sql_deletion_statement = "DELETE FROM ratio_metrics WHERE date = (%s)"
+    sql_deletion_value = (t_date, )
+    cursor.execute(sql_deletion_statement, sql_deletion_value)
+    cn.commit()
