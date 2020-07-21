@@ -28,7 +28,7 @@ def get_work_tasks_achieved():
     query_result = cursor.fetchall()
     
     num_completed = query_result[0][0]
-    print(num_completed)
+    
     return num_completed
     
 def get_aux_tasks_achieved():
@@ -43,7 +43,6 @@ def get_aux_tasks_achieved():
     query_result = cursor.fetchall()
     
     num_completed = query_result[0][0]
-    print(num_completed)
     return num_completed
 
 def get_coins_from_work():
@@ -75,8 +74,6 @@ def get_coins_from_aux_tasks():
     query_result = cursor.fetchall()
     
     num_aux_coins = query_result[0][0]
-    
-    print(num_aux_coins)
     return num_aux_coins   
 
 def insert_task_metric():
@@ -186,13 +183,3 @@ def update_ratios():
         insert_ratios(wct, apw)
     else:
         print("Validation error")
-    
-
-    
-
-def main():
-    update_ratios()
-    ##update_time_metrics_table()
-    
-if __name__ == "__main__":
-    main()
