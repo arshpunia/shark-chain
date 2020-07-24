@@ -46,6 +46,12 @@ def add_task_on_the_fly(taskname):
     stm.insert_work_task(t_date,"00:00:00",taskname)
     print("Inserted new task in today's TODO list: "+taskname)
     
+def query_pending_tasks():
+    """
+    Method to print the remaining TODO taks for the day
+    """
+    stm.get_remaining_tasks()
+    
 def shc_aux_ecosystem(completed_task):
     
     uct.add_auct(completed_task)
@@ -88,8 +94,8 @@ def invoke_shc(flag, task):
         print("--> -a <auxiliary-task-name>")
         print("--> -t <work-target-file>")
         print("--> -nt <new-task>")
-   
-    
+        print("--> -ft <YYYY-MM-DD> <work-target-file>")
+        print("--> -q")
 def main():
     if len(sys.argv) == 3:
         invoke_shc(sys.argv[1],sys.argv[2])
@@ -101,13 +107,16 @@ def main():
             print("Improper invocation\nPlease invoke  future task mode as: ")
             print("--> -ft <YYYY-MM-DD> <work-target-file>")
         
-        
+    elif len(sys.argv) ==2 and sys.argv[1] == "-q":
+        query_pending_tasks()
+    
     else:
         print("Improper invocation\nPlease use one of the supported flags as follows: ")
         print("--> -w <work-task-name>")
         print("--> -a <auxiliary-task-name>")
         print("--> -t <work-target-file>")
         print("--> -ft <task-date> <work-target-file>")
-        
+        print("--> -nt <new-task>")
+        print("--> -q")
 if __name__ == "__main__":
     main()

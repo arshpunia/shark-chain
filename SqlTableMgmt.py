@@ -2,6 +2,7 @@ import mysql.connector
 from datetime import datetime 
 from dotenv import load_dotenv
 import os
+from prettytable import PrettyTable
 
 def connect_to_db():
     load_dotenv()
@@ -125,6 +126,21 @@ def update_completed_work_task(task):
     sql_val = (task,t_date)
     cursor.execute(update_command,sql_val)
     cn.commit()     
+
+def get_remaining_tasks():
+    cn = connect_to_db()
+    cursor = cn.cursor()
+    t_date = datetime.now().strftime("%Y-%m-%d")
+    sql_query = "SELECT * FROM work_tasks WHERE date = (%s) AND is_completed = (%s)"
+    sql_vals = (t_date, False)
+    cursor.execute(sql_query, sql_vals)
+    query_result = cursor.fetchall()
+    remaining_tasks = PrettyTable()
+    remaining_tasks.field_names = ["Pending Tasks"]
+    for task in query_result:
+        remaining_tasks.add_row([task[2]])
+    
+    print(remaining_tasks)
     
 def  populate_work_task_table(date, time, task_file):
     print("Populating work_tasks table with "+task_file+"...")
