@@ -37,8 +37,15 @@ def shc_work_ecosystem(completed_task):
     
         print(str(len(w_list))+" unconfirmed work tasks currently awaiting addition to the ledger")
     
+def add_task_on_the_fly(taskname):
+    """
+    Method to add a work task to the TODO list after the task file has been submitted  
+    """
+    t_date = datetime.now().strftime("%Y-%m-%d")
     
-
+    stm.insert_work_task(t_date,"00:00:00",taskname)
+    print("Inserted new task in today's TODO list: "+taskname)
+    
 def shc_aux_ecosystem(completed_task):
     
     uct.add_auct(completed_task)
@@ -72,11 +79,15 @@ def invoke_shc(flag, task):
         t_date = datetime.now().strftime("%Y-%m-%d")
         time_now = datetime.now().strftime("%H:%M:%S")
         stm.populate_work_task_table(t_date, "00:00:00", task)
+    
+    elif flag == "-nt":
+        add_task_on_the_fly(task)
     else:
         print("Unsupported flag\nPlease use one of the supported flags as follows: ")
         print("--> -w <work-task-name>")
         print("--> -a <auxiliary-task-name>")
         print("--> -t <work-target-file>")
+        print("--> -nt <new-task>")
    
     
 def main():
