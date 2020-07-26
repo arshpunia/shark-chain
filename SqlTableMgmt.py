@@ -63,8 +63,8 @@ def check_for_auxiliary_task_block():
     cn = connect_to_db()
     cursor = cn.cursor()
     t_date = datetime.now().strftime("%Y-%m-%d")
-    block_query = "SELECT * FROM auxiliary_tasks WHERE date = (%s) AND is_completed = (%s) AND added_to_ledger = (%s)"
-    query_parameters = (t_date, True,False)
+    block_query = "SELECT * FROM auxiliary_tasks WHERE is_completed = (%s) AND added_to_ledger = (%s)"
+    query_parameters = (True,False)
     cursor.execute(block_query,query_parameters)
     query_result = cursor.fetchall()
     auct_list = []
