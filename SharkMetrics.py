@@ -80,8 +80,9 @@ def query_time_metrics():
     time_table.field_names = ["Date","Time","Work Tasks","Auxiliary Tasks"]
     query_result = cursor.fetchall()
     
-    time_row = []
+    
     for timestamp in query_result:
+        time_row = []
         if timestamp[2] > 0 or timestamp[3] > 0:
             time_row.extend([timestamp[0],timestamp[1],timestamp[2],timestamp[3]])
             time_table.add_row(time_row)

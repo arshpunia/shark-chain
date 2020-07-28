@@ -87,7 +87,7 @@ def insert_task_metric():
     num_work_coins = get_coins_from_work()
     print(str(num_work_coins)+" SharkCoins were earned from completing work-related tasks")
     num_aux_coins = get_coins_from_aux_tasks()
-    print(str(num_aux_coins) + " SharkCoins were earned from completing work-related tasks")
+    print(str(num_aux_coins) + " SharkCoins were earned from completing auxiliary tasks")
     cn = stm.connect_to_db()
     cursor = cn.cursor()
     t_date = datetime.now().strftime("%Y-%m-%d")
