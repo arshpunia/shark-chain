@@ -118,6 +118,14 @@ def insert_work_task(date, time, task):
     cursor.execute(insertion_command, vals)
     cn.commit()
 
+def insert_captured_task(task_name):
+    cn = connect_to_db()
+    cursor = cn.cursor()
+    sql_insertion_statement = "INSERT INTO captured_tasks VALUES (%s,NOW())"
+    sql_insertion_values = (task_name, )
+    cursor.execute(sql_insertion_statement, sql_insertion_values)
+    cn.commit()
+
 def update_completed_work_task(task):
     cn = connect_to_db()
     cursor = cn.cursor()
@@ -139,6 +147,19 @@ def get_remaining_tasks():
     remaining_tasks.field_names = ["Pending Tasks"]
     for task in query_result:
         remaining_tasks.add_row([task[2]])
+    
+    print(remaining_tasks)
+
+def get_captured_tasks():
+    cn = connect_to_db()
+    cursor = cn.cursor()
+    sql_query = "SELECT * FROM captured_tasks"
+    cursor.execute(sql_query)
+    query_result = cursor.fetchall()
+    remaining_tasks = PrettyTable()
+    remaining_tasks.field_names = ["Captured Task","Date"]
+    for task in query_result:
+        remaining_tasks.add_row([task[0],task[1]])
     
     print(remaining_tasks)
     

@@ -45,7 +45,10 @@ def add_task_on_the_fly(taskname):
     
     stm.insert_work_task(t_date,"00:00:00",taskname)
     print("Inserted new task in today's TODO list: "+taskname)
-    
+
+def query_captured_tasks():
+    stm.get_captured_tasks()
+ 
 def query_pending_tasks():
     """
     Method to print the remaining TODO taks for the day
@@ -61,6 +64,9 @@ def shc_aux_ecosystem(completed_task):
     else:
         print(str(len(a_list))+" unconfirmed auxiliary tasks currently awaiting addition to the ledger")
     
+def capture_task(task_name):
+    stm.insert_captured_task(task_name)
+    print("Captured new task: "+task_name)
 
 def validate_date_string(date_text):
 ##Adapted from https://stackoverflow.com/questions/16870663/how-do-i-validate-a-date-string-format-in-python
@@ -88,12 +94,16 @@ def invoke_shc(flag, task):
     
     elif flag == "-nt":
         add_task_on_the_fly(task)
+    
+    elif flag == "-c":
+        capture_task(task)
     else:
         print("Unsupported flag\nPlease use one of the supported flags as follows: ")
         print("--> -w <work-task-name>")
         print("--> -a <auxiliary-task-name>")
         print("--> -t <work-target-file>")
         print("--> -nt <new-task>")
+        print("--> -c <captured-task>")
         print("--> -ft <YYYY-MM-DD> <work-target-file>")
         print("--> -q")
 def main():
@@ -109,6 +119,9 @@ def main():
         
     elif len(sys.argv) ==2 and sys.argv[1] == "-q":
         query_pending_tasks()
+    
+    elif len(sys.argv) ==2 and sys.argv[1] == "-cq":
+        query_captured_tasks()
     
     else:
         print("Improper invocation\nPlease use one of the supported flags as follows: ")
