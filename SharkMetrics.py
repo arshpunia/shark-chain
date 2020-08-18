@@ -20,6 +20,8 @@ def clear_metrics_tables(): ##Clears todays recrods from the respective metrics 
 def run_report():
     clear_metrics_tables()
     update_metrics_tables()
+    w_ratio = ae.get_weekly_ratio()
+    print("Your weekly ratio thus far is: "+str(w_ratio))
 
 #####Query Methods
 

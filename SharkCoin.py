@@ -5,7 +5,20 @@ import sys
 import os 
 from dotenv import load_dotenv
 from datetime import datetime
+import AnalyticsEngine as ae
 
+
+
+
+def analysis_upon_completion():
+    work_tasks_targeted = ae.get_work_tasks_targeted()
+    work_tasks_achieved = ae.get_work_tasks_achieved()
+    t_ratio = work_tasks_achieved/work_tasks_targeted
+    w_ratio = (float(ae.get_weekly_ratio()) + t_ratio)/2
+    print("Your WCT ratio for today is: "+format(t_ratio,'.2f'))
+    print("Your weekly ratio thus far is: "+format(w_ratio,'.2f'))
+    
+    
 def shc_ecosystem(completed_task):
     load_dotenv()
     uct.add_uct(completed_task)
@@ -36,6 +49,7 @@ def shc_work_ecosystem(completed_task):
     else:
     
         print(str(len(w_list))+" unconfirmed work tasks currently awaiting addition to the ledger")
+    analysis_upon_completion()
     
 def add_task_on_the_fly(taskname):
     """
@@ -63,6 +77,8 @@ def shc_aux_ecosystem(completed_task):
         uct.mine_block(a_list,'auxiliary_tasks')
     else:
         print(str(len(a_list))+" unconfirmed auxiliary tasks currently awaiting addition to the ledger")
+    
+    analysis_upon_completion()
     
 def capture_task(task_name):
     stm.insert_captured_task(task_name)
@@ -107,6 +123,7 @@ def invoke_shc(flag, task):
         print("--> -ft <YYYY-MM-DD> <work-target-file>")
         print("--> -q")
 def main():
+    
     if len(sys.argv) == 3:
         invoke_shc(sys.argv[1],sys.argv[2])
     
@@ -131,5 +148,7 @@ def main():
         print("--> -ft <task-date> <work-target-file>")
         print("--> -nt <new-task>")
         print("--> -q")
+    
+    
 if __name__ == "__main__":
     main()

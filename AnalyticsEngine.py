@@ -192,6 +192,15 @@ def delete_todays_time_metrics():
 
 ##*****************************Methods for ratio_metrics***************************
 
+def get_weekly_ratio():
+    cn = stm.connect_to_db()
+    cursor = cn.cursor()
+    sql_query_statement = "SELECT AVG(w_ct) FROM ratio_metrics WHERE YEARWEEK(date) = YEARWEEK(NOW());"
+    cursor.execute(sql_query_statement)
+    query_results = cursor.fetchall()
+    weekly_ratio = query_results[0][0]
+    return weekly_ratio
+
 def insert_ratios(wct_ratio, apw_ratio): ##wct = work completed to targeted; apw = aux per work 
     cn = stm.connect_to_db()
     cursor = cn.cursor()
