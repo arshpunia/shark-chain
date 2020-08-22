@@ -20,9 +20,14 @@ def clear_metrics_tables(): ##Clears todays recrods from the respective metrics 
 def run_report():
     clear_metrics_tables()
     update_metrics_tables()
-    w_ratio = ae.get_weekly_ratio()
-    print("Your weekly ratio thus far is: "+str(w_ratio))
-
+    work_tasks_targeted = ae.get_work_tasks_targeted()
+    work_tasks_achieved = ae.get_work_tasks_achieved()
+    t_ratio = work_tasks_achieved/work_tasks_targeted
+    w_ratio, num_days = ae.get_weekly_ratio()
+    pw_ratio = (float(w_ratio)+t_ratio)/(num_days+1)
+ 
+    print("Your weekly ratio thus far is: "+format(pw_ratio,'.2f'))
+    
 #####Query Methods
 
 def query_task_metrics():
