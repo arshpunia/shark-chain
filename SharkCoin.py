@@ -18,6 +18,7 @@ def analysis_upon_completion():
     pw_ratio = (float(w_ratio)+t_ratio)/(num_days+1)
     print("Your WCT ratio for today is: "+format(t_ratio,'.2f'))
     print("Your weekly ratio thus far is: "+format(pw_ratio,'.2f'))
+    ae.get_donut_chart()
     
     
 def shc_ecosystem(completed_task):
