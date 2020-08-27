@@ -28,6 +28,9 @@ def run_report():
  
     print("Your weekly ratio thus far is: "+format(pw_ratio,'.2f'))
     
+    ae.get_weekly_performance_chart()
+    ae.time_metrics_for_visualization()
+    
 #####Query Methods
 
 def query_task_metrics():

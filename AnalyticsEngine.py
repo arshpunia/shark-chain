@@ -1,5 +1,6 @@
 import SqlTableMgmt as stm
 from datetime import datetime 
+import matplotlib.pyplot as plt
 
 ##----------Methods for the task_metrics table--------------
 
@@ -159,6 +160,22 @@ def get_aux_time_metrics():
             time_ranges[rounded_time] = time_ranges[rounded_time]+1
     return time_ranges    
 
+def time_metrics_for_visualization():
+    time_dict = get_time_dict()
+    
+    cn = stm.connect_to_db()
+    cursor = cn.cursor()
+    
+    sql_query_statement = "SELECT * FROM time_metrics"
+    cursor.execute(sql_query_statement)
+    
+    query_result = cursor.fetchall()
+    for row in query_result:
+        time_val = str(row[1])
+        formatted_time = (datetime.min+row[1]).time().strftime("%H:00:00")
+        time_dict[formatted_time] = time_dict[formatted_time]+row[2]
+    
+    print(str(time_dict))
 def insert_time_metric(time, work_metric, aux_metric):
     cn = stm.connect_to_db()
     cursor = cn.cursor()
@@ -210,7 +227,19 @@ def get_weekly_ratio():
     
     return (ratio_sum, count)
 
-
+def get_weekly_ratio_list():
+    cn = stm.connect_to_db()
+    cursor = cn.cursor()
+    sql_query_statement = "SELECT date,w_ct FROM ratio_metrics WHERE YEARWEEK(date) = YEARWEEK(NOW());"
+    cursor.execute(sql_query_statement)
+    query_results = cursor.fetchall()
+    dates_list = []
+    ratios_list = []
+    for row in query_results:
+        dates_list.append(str(row[0])[5:])
+        ratios_list.append(row[1])
+    
+    return (dates_list, ratios_list)
 
 def insert_ratios(wct_ratio, apw_ratio): ##wct = work completed to targeted; apw = aux per work 
     cn = stm.connect_to_db()
@@ -258,3 +287,26 @@ def delete_todays_ratio_metrics():
     ##sql_deletion_value = ('2020-08-01', )
     cursor.execute(sql_deletion_statement, sql_deletion_value)
     cn.commit()
+
+#########Methods for data visualization################
+
+def get_donut_chart():
+    cn = stm.connect_to_db()
+    cursor = cn.cursor()
+    work_targeted = get_work_tasks_targeted()
+    work_achieved = get_work_tasks_achieved()
+    work_remaining = work_targeted - work_achieved
+    names=['Tasks remaining', 'Tasks Completed']
+    donut_params = [work_remaining, work_achieved]
+    plt.pie(donut_params, labels = names, autopct='%1.1f%%', startangle=90)
+    middle_circle = plt.Circle((0,0),0.7, color='white')
+    p = plt.gcf()
+    p.gca().add_artist(middle_circle)
+    plt.show()
+  
+
+
+def get_weekly_performance_chart():
+    dates_list, ratios_list = get_weekly_ratio_list()
+    plt.plot(dates_list, ratios_list)
+    plt.show()
