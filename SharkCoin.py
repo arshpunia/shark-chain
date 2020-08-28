@@ -16,7 +16,7 @@ def analysis_upon_completion():
     t_ratio = work_tasks_achieved/work_tasks_targeted
     w_ratio, num_days = ae.get_weekly_ratio()
     pw_ratio = (float(w_ratio)+t_ratio)/(num_days+1)
-    print("Your WCT ratio for today is: "+format(t_ratio,'.2f'))
+    ##print("Your WCT ratio for today is: "+format(t_ratio,'.2f'))
     print("Your weekly ratio thus far is: "+format(pw_ratio,'.2f'))
     ae.get_donut_chart()
     

@@ -175,7 +175,8 @@ def time_metrics_for_visualization():
         formatted_time = (datetime.min+row[1]).time().strftime("%H:00:00")
         time_dict[formatted_time] = time_dict[formatted_time]+row[2]
     
-    print(str(time_dict))
+    return time_dict
+    
 def insert_time_metric(time, work_metric, aux_metric):
     cn = stm.connect_to_db()
     cursor = cn.cursor()
@@ -308,5 +309,24 @@ def get_donut_chart():
 
 def get_weekly_performance_chart():
     dates_list, ratios_list = get_weekly_ratio_list()
-    plt.plot(dates_list, ratios_list)
-    plt.show()
+    ##weekly_plot = plt.plot(dates_list, ratios_list)
+    return (dates_list, ratios_list)
+    
+def get_time_metrics_chart():
+    time_list = []
+    num_list = []
+    time_metrics = time_metrics_for_visualization()
+    for key in time_metrics:
+        time_list.append(key[0:5])
+        num_list.append(time_metrics[key])
+    
+    ##print(str(time_metrics))
+    return (time_list, num_list)
+    
+    
+    
+    
+    
+    
+    
+    

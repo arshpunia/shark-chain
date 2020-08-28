@@ -3,6 +3,7 @@ import SqlTableMgmt as stm
 from datetime import datetime
 from prettytable import PrettyTable
 import sys
+import matplotlib.pyplot as plt
 
 def update_metrics_tables():
     """
@@ -27,9 +28,14 @@ def run_report():
     pw_ratio = (float(w_ratio)+t_ratio)/(num_days+1)
  
     print("Your weekly ratio thus far is: "+format(pw_ratio,'.2f'))
-    
-    ae.get_weekly_performance_chart()
-    ae.time_metrics_for_visualization()
+    week_dates, daily_ratios = ae.get_weekly_performance_chart()
+    time_stamps, tasks_completed = ae.get_time_metrics_chart()
+    ##ae.get_weekly_performance_chart()
+    ##ae.time_metrics_for_visualization()
+    fig, axs = plt.subplots(2)
+    axs[0].plot(week_dates, daily_ratios)
+    axs[1].bar(time_stamps, tasks_completed)
+    plt.show()
     
 #####Query Methods
 
