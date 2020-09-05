@@ -1,17 +1,18 @@
 # shark-chain #
 shark-chain is a functional productivity solution that aims to declutter planning, capturing and progress-measurement by virtue of minimalism. There are no shiny buttons or pop-ups, just a simple command-line interface that allows you to: 
+
+- Create a TODO lists
+- Edit today's TODO list on the fly
 - Capture tasks or ideas for future review as they come to your mind
-- Add to today's TODO list
-- Create a TODO list for any day in the future
 - Mark tasks as completed
 - Run a numeric analysis on your daily/weekly performance. This includes
    - Completion ratios
    - Task completion timestamps (Useful for determining most productive hours)
    - SharkCoins minted (More on this in further sections)
 
-Minimalism, however should not be mistaken for boring. There is a (admittedly) rudimentary blockchain operating underneath it all that adds your completed tasks to a ledger; so for every 5 tasks you complete, the system jumps through the hoops of calculating a proof of work and mints 1 SharkCoin as an incentive for your perseverance. 
+Minimalism, however should not be mistaken for boring. There is a (admittedly) rudimentary blockchain operating underneath it all that adds your completed tasks to a _ledger_; so for every 5 tasks you complete, the system jumps through the hoops of calculating a proof of work and mints 1 SharkCoin as an incentive for your perseverance. 
 
-_Please note that this codebase is not intended for public use at the moment. shark-chain in its present shape and form was built by me to suit my requirements when it came to productivity. I am presently learning microservices and web app development so I can start working on a consumer version in Q4 2020 and have a beta out by Q2 2021._
+_Please note that this codebase is not intended for public use at the moment. shark-chain in its present shape and form was built by me to suit my requirements when it came to productivity. I am presently learning microservices and web app development so I can start working on a consumer version in Q1 2021 and have a beta out by Q3 2021._
 
 _If you have any suggestions, please reach out to me and I'd be happy to discuss them with you_
 
@@ -24,7 +25,7 @@ In building the product, I made a distinction between work tasks and auxiliary t
 
 _work-tasks_ are tasks directly related to professional or academic life, such as an upcoming deadline or a deliverable on a work/personal project. 
 
-_auxiliry-tasks_ are tasks that, though important or resourceful, are not directly linked to my professional or academic life. This could involve things like finishing a certain percentage of a book, going for a run, etc. Note that auxiliary-tasks do not have a TODO attached to them in shark-chain. 
+_auxiliry-tasks_ are tasks that, though important or resourceful, are not directly linked to my professional or academic life. This could involve things like finishing a certain percentage of a book, going for a run, etc. Note that auxiliary-tasks do not have a TODO attached to them in shark-chain.
 
 ## TODOs for the future :calendar: ##
 
@@ -52,6 +53,8 @@ To mark a work-task as complete:
 
 Please note that `task-name` needs to be in today's TODO list for shark-chain to recognize the task and mark it as complete.
 
+Running this command will also report your completion ratio for today, in addition to the mean completion ratio for the week. 
+
 ## Marking an auxiliary task as completed ##
 
 To mark an auxiliary task as complete: 
@@ -71,7 +74,7 @@ Sometimes it happens (at least with me) when a task suddenly comes to mind, or I
 
 `python SharkCoin.py -c <idea>`
 
-Note that `<idea>` is not a task that is added to today's TODO list. Instead, it is added to a separate database, isolated from everything else, including your memory :brain:
+Note that `<idea>` is not a task that is added to today's TODO list. Instead, it is added to a separate database, isolated from everything else, including lapses of your memory :brain:
 
 ## Querying captured ideas ## 
 
@@ -81,7 +84,7 @@ To list all the ideas you have captured (and not deleted from the database):
 
 ## Analyze performance ##
 
-To conduct an analysis of your daily performance, including your success ratios and time metrics: 
+To conduct an analysis of your daily performance, including your completion ratios and time metrics: 
 `python SharkMetrics.py -r`
 
 ## Query performance statistics ##
@@ -89,7 +92,17 @@ To conduct an analysis of your daily performance, including your success ratios 
 To query your performance metrics for today:
 `python SharkMetrics.py -q`
 
-## TODO ##
+## The BlockChain (Or the lack of a real one) ##
+
+Around the time I first started developing shark-chain, I was listening to a _fascinating_ [episode](#https://tim.blog/2017/06/04/nick-szabo/) of the Tim Ferris show where he interviewed Nick Szabo and Naval Ravikant. In what is one of my favourite podcast episodes ever, Tim, Nick, and Naval explore the origins, evolution and prospects for blockchains and cryptocurrencies. It is a truly enlightening conversation, one I highly recommend, and while it did not turn me into a _crypto-bro_ (I don't think anything ever will), it did instil a sense of awe surrounding ledgers and proofs of work. 
+
+And so I decided to have fun in my own little way with blockchains and cryptocurrencies by infusing one into what was then an un-named work tracking system. 
+
+For every five tasks you complete, shark-chain combines the task names into a single string and keeps trying to suffix it with a numerical value till its hash matches a defined pattern. Once this proof-of-work has been computed, a coin is "minted" (or "mint", I don't know, English is my third language) and shark-chain adds the hash to a SQL database. 
+
+Now before the crypto utopians come at me with their $10k rigs and hardware wallets, I know that what I have is far from a real block-chain; its not distributed, its not immutable, it literally lies on an unencrypted database, and it has a million other flaws. My answer is that I never set out to create a blockchain based system. 
+
+
 - Add section on coins and the _blockchain_ design
 - Explain the different types of metrics
 - Add a few images
