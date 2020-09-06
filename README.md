@@ -120,6 +120,7 @@ shark-chain tries to capture some basic metrics that you can use to track your p
 ## The Road ahead ##
 
 - Like I have mentioned before, shark-chain is custom built for my use, and I plan on keep adding features as my priorities shift and evolve. With that said, I will get started on a more generic version hopefully in Q1 2021. 
+- One of biggest blunders I made early on was to not have a simple ID for each task. It is sometimes cumbersome and even inefficient to have to write the entire task description while marking it as complete. I'll definitely fix this soon.
 - However, if you want to play with shark-chain, please reach out, and I'd be happy to help you set it up, and even make custom mods for your use cases. 
 
 ## Suggestions ##
