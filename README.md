@@ -53,7 +53,9 @@ To mark a work-task as complete:
 
 Please note that `task-name` needs to be in today's TODO list for shark-chain to recognize the task and mark it as complete.
 
-Running this command will also report your completion ratio for today, in addition to the mean completion ratio for the week. 
+Running this command will also report your completion ratio for today, in addition to the mean completion ratio for the current week. 
+
+You will also see a donut chart displaying the percentage of tasks completed and the percentage you are yet to attack. 
 
 ## Marking an auxiliary task as completed ##
 
@@ -62,6 +64,8 @@ To mark an auxiliary task as complete:
 `python SharkCoin.py -a <task-name>`
 
 As has been noted earlier, auxiliary-tasks can be more ad-hoc and are not attached to a TODO list. 
+
+As with completed work tasks, you will see some basic metrics showing your performance for the day and the current week
 
 ## Querying for work-tasks that are not yet completed ##
 
@@ -84,8 +88,10 @@ To list all the ideas you have captured (and not deleted from the database):
 
 ## Analyze performance ##
 
-To conduct an analysis of your daily performance, including your completion ratios and time metrics: 
+To conduct an analysis of your daily performance, including your completion ratios and time metrics (For details on what is tracked, look [here](#metrics)): 
 `python SharkMetrics.py -r`
+
+In addition to the text-based output, one graph is also shown. It displays the trend of your completion ratios throughout the week, a quick, helpful indicator of your performance. 
 
 ## Query performance statistics ##
 
@@ -94,20 +100,27 @@ To query your performance metrics for today:
 
 ## The BlockChain (Or the lack of a real one) ##
 
-Around the time I first started developing shark-chain, I was listening to a _fascinating_ [episode](#https://tim.blog/2017/06/04/nick-szabo/) of the Tim Ferris show where he interviewed Nick Szabo and Naval Ravikant. In what is one of my favourite podcast episodes ever, Tim, Nick, and Naval explore the origins, evolution and prospects for blockchains and cryptocurrencies. It is a truly enlightening conversation, one I highly recommend, and while it did not turn me into a _crypto-bro_ (I don't think anything ever will), it did instil a sense of awe surrounding ledgers and proofs of work. 
+Around the time I first started developing shark-chain, I was listening to a _fascinating_ [episode](https://tim.blog/2017/06/04/nick-szabo/) of the Tim Ferris show where he interviewed Nick Szabo and Naval Ravikant. In what is one of my favourite podcast episodes ever, Tim, Nick, and Naval explore the origins, evolution and prospects for blockchains and cryptocurrencies. It is a truly enlightening conversation, one I highly recommend, and while it did not turn me into a _crypto-bro_ (I don't think anything ever will), it did instil a sense of awe surrounding ledgers and proofs of work. 
 
 And so I decided to have fun in my own little way with blockchains and cryptocurrencies by infusing one into what was then an un-named work tracking system. 
 
 For every five tasks you complete, shark-chain combines the task names into a single string and keeps trying to suffix it with a numerical value till its hash matches a defined pattern. Once this proof-of-work has been computed, a coin is "minted" (or "mint", I don't know, English is my third language) and shark-chain adds the hash to a SQL database. 
 
-Now before the crypto utopians come at me with their $10k rigs and hardware wallets, I know that what I have is far from a real block-chain; its not distributed, its not immutable, it literally lies on an unencrypted database, and it has a million other flaws. My answer is that I never set out to create a blockchain based system. 
+Now before the crypto utopians come at me with their $10k rigs and hardware wallets, I know that what I have is far from a real block-chain; its not distributed, its not immutable, it literally lies on an unencrypted database, and it has a million other flaws. My answer is that I never set out to create a blockchain based system; I just wanted to play with some of the concepts that are involved. Plus, the coins are a nice incentive for completing tasks, so I figured why not? 
 
+## Metrics ##
 
-- Add section on coins and the _blockchain_ design
-- Explain the different types of metrics
-- Add a few images
-- Method to remove a captured thought
-- metrics.py to get stats for the week
+shark-chain tries to capture some basic metrics that you can use to track your performance. For example, I use a Tableau dashboard to visualize my weekly performance and productivity trends which I then use to set targets for the upcoming week. Here is a brief description of the metrics that are measured by shark-chain: 
+
+- Work Completed Tasks (wct): A simple ratio of the number of tasks completed to the number of tasks targeted. Probably the most important metric tracked
+- Coins from work: Tracks the number of coins that you "earned" from completing work-related tasks. A fun metric, but certainly not the most useful considering it is not a ratio
+- Coins from auxiliary: Just like "coins from work", except for auxiliary tasks 
+- Time metrics: Tracks the number of tasks completed every hour of the day. In an ideal world, this would be helpful to track my most productive hours. However, I usually take this with some salt as I do not always mark tasks as completed as soon as I finish them, but still great to gather a general sense at the macro level. 
+
+## The Road ahead ##
+
+- Like I have mentioned before, shark-chain is custom built for my use, and I plan on keep adding features as my priorities shift and evolve. With that said, I will get started on a more generic version hopefully in Q1 2021. 
+- However, if you want to play with shark-chain, please reach out, and I'd be happy to help you set it up, and even make custom mods for your use cases. 
 
 ## Suggestions ##
 
