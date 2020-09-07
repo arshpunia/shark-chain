@@ -262,8 +262,8 @@ def update_ratios():
     
     sql_query_statement = "SELECT * FROM task_metrics WHERE date = (%s)"
     ##t_date = datetime.now().strftime("%Y-%m-%d")
-    ##sql_vals = (t_date,)
-    sql_vals = ('2020-08-31',)
+    sql_vals = (t_date,)
+    ##sql_vals = ('2020-08-31',)
     cursor.execute(sql_query_statement, sql_vals)
     query_result = cursor.fetchall()
     wct = 0

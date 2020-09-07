@@ -28,6 +28,7 @@ def run_report():
     pw_ratio = (float(w_ratio)+t_ratio)/(num_days+1)
  
     print("Your weekly ratio thus far is: "+format(pw_ratio,'.2f'))
+    
     week_dates, daily_ratios = ae.get_weekly_performance_chart()
     time_stamps, tasks_completed = ae.get_time_metrics_chart()
     ##ae.get_weekly_performance_chart()

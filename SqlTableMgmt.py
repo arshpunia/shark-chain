@@ -13,7 +13,7 @@ def connect_to_db():
         host = "localhost",
         user = db_username,
         password = db_password,
-        database = "shark_coin_analytics_dev"
+        database = "shark_coin_analytics"
     )
     ##cursor = mydb.cursor()
     
