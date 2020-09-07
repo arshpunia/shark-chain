@@ -14,6 +14,8 @@ Minimalism, however should not be mistaken for boring. There is a (admittedly) r
 
 _Please note that this codebase is not intended for public use at the moment. shark-chain in its present shape and form was built by me to suit my requirements when it came to productivity. I am presently learning microservices and web app development so I can start working on a consumer version in Q1 2021 and have a beta out by Q3 2021._
 
+_If you would like to play with shark-chain, please reach out and I'd be happy to help you set it up. If possible, I can also work on customizing the software for you_
+
 _If you have any suggestions, please reach out to me and I'd be happy to discuss them with you_
 
 
