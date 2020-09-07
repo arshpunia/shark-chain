@@ -2,13 +2,17 @@ import SqlTableMgmt as stm
 from datetime import datetime 
 import matplotlib.pyplot as plt
 
+
+t_date = datetime.now().strftime("%Y-%m-%d")
+##t_date = '2020-08-31'
+
 ##----------Methods for the task_metrics table--------------
 
 def get_work_tasks_targeted():
     cn = stm.connect_to_db()
     cursor = cn.cursor()
     query_statement = "SELECT COUNT(*) FROM work_tasks WHERE date = (%s)"
-    t_date = datetime.now().strftime("%Y-%m-%d")
+    ##t_date = datetime.now().strftime("%Y-%m-%d")
     sql_val = (t_date, )
     ##sql_val = ('2020-08-01', )
     cursor.execute(query_statement, sql_val)
@@ -23,7 +27,7 @@ def get_work_tasks_achieved():
     cursor = cn.cursor()
     
     query_statement = "SELECT COUNT(*) FROM work_tasks WHERE date = (%s) AND is_completed = (%s)"
-    t_date = datetime.now().strftime("%Y-%m-%d")
+    ##t_date = datetime.now().strftime("%Y-%m-%d")
     sql_vals = (t_date, True)
     ##sql_vals = ('2020-08-01', True)
     cursor.execute(query_statement,sql_vals)
@@ -39,7 +43,7 @@ def get_aux_tasks_achieved():
     cursor = cn.cursor()
     
     query_statement = "SELECT COUNT(*) FROM auxiliary_tasks WHERE date = (%s) AND is_completed = (%s)"
-    t_date = datetime.now().strftime("%Y-%m-%d")
+    ##t_date = datetime.now().strftime("%Y-%m-%d")
     sql_vals = (t_date, True)
     ##sql_vals = ('2020-08-01', True)
     cursor.execute(query_statement,sql_vals)
@@ -54,7 +58,7 @@ def get_coins_from_work():
     cursor = cn.cursor()
     
     query_statement = "SELECT COUNT(*) FROM hash_records WHERE date = (%s) AND hash LIKE (%s)"
-    t_date = datetime.now().strftime("%Y-%m-%d")
+    ##t_date = datetime.now().strftime("%Y-%m-%d")
     wildcard = '333%'
     sql_vals = (t_date, wildcard)
     ##sql_vals = ('2020-08-01', wildcard)
@@ -71,7 +75,7 @@ def get_coins_from_aux_tasks():
     cursor = cn.cursor()
     
     query_statement = "SELECT COUNT(*) FROM hash_records WHERE date = (%s) AND hash LIKE (%s)"
-    t_date = datetime.now().strftime("%Y-%m-%d")
+   ## t_date = datetime.now().strftime("%Y-%m-%d")
     wildcard = '111%'
     sql_vals = (t_date, wildcard)
     ##sql_vals = ('2020-08-01', wildcard)
@@ -95,7 +99,7 @@ def insert_task_metric():
     print(str(num_aux_coins) + " SharkCoins were earned from completing auxiliary tasks")
     cn = stm.connect_to_db()
     cursor = cn.cursor()
-    t_date = datetime.now().strftime("%Y-%m-%d")
+    ##t_date = datetime.now().strftime("%Y-%m-%d")
     sql_insertion_statement = "INSERT INTO task_metrics VALUES (%s,%s,%s,%s,%s,%s)"
     sql_vals = (t_date, num_work_targets, num_work_achieved, num_aux_tasks, num_work_coins, num_aux_coins)
     ##sql_vals = ('2020-08-01', num_work_targets, num_work_achieved, num_aux_tasks, num_work_coins, num_aux_coins)
@@ -106,7 +110,7 @@ def insert_task_metric():
 def delete_todays_metrics():
     cn = stm.connect_to_db()
     cursor = cn.cursor()
-    t_date = datetime.now().strftime("%Y-%m-%d")
+    ##t_date = datetime.now().strftime("%Y-%m-%d")
     sql_deletion_statement = "DELETE FROM task_metrics WHERE date = (%s)"
     sql_deletion_value = (t_date, )
     ##sql_deletion_value = ('2020-08-01', )
@@ -126,7 +130,7 @@ def get_work_time_metrics():
     cursor = cn.cursor()
     
     sql_query_statement = "SELECT * FROM work_tasks WHERE date = (%s) and is_completed = (%s)"
-    t_date = datetime.now().strftime("%Y-%m-%d")
+    ##t_date = datetime.now().strftime("%Y-%m-%d")
     sql_vals = (t_date, True)
     ##sql_vals = ('2020-08-01', True)
     cursor.execute(sql_query_statement, sql_vals)
@@ -147,7 +151,7 @@ def get_aux_time_metrics():
     cursor = cn.cursor()
     
     sql_query_statement = "SELECT * FROM auxiliary_tasks WHERE date = (%s) and is_completed = (%s)"
-    t_date = datetime.now().strftime("%Y-%m-%d")
+    ##t_date = datetime.now().strftime("%Y-%m-%d")
     sql_vals = (t_date, True)
     ##sql_vals = ('2020-08-01', True)
     cursor.execute(sql_query_statement, sql_vals)
@@ -181,9 +185,9 @@ def insert_time_metric(time, work_metric, aux_metric):
     cn = stm.connect_to_db()
     cursor = cn.cursor()
     
-    sql_insertion_statement = "INSERT INTO time_metrics VALUES (NOW(),%s,%s,%s)"
-    ##sql_insertion_statement = "INSERT INTO time_metrics VALUES (%s,%s,%s,%s)"
-    sql_insertion_vals = (time, work_metric, aux_metric)
+    ##sql_insertion_statement = "INSERT INTO time_metrics VALUES (NOW(),%s,%s,%s)"
+    sql_insertion_statement = "INSERT INTO time_metrics VALUES (%s,%s,%s,%s)"
+    sql_insertion_vals = (t_date,time, work_metric, aux_metric)
     ##sql_insertion_vals = ('2020-08-01',time, work_metric, aux_metric)
     cursor.execute(sql_insertion_statement, sql_insertion_vals)
     cn.commit()
@@ -200,7 +204,7 @@ def update_time_metrics_table():
 def delete_todays_time_metrics():
     cn = stm.connect_to_db()
     cursor = cn.cursor()
-    t_date = datetime.now().strftime("%Y-%m-%d")
+    ##t_date = datetime.now().strftime("%Y-%m-%d")
     sql_deletion_statement = "DELETE FROM time_metrics WHERE date = (%s)"
     sql_deletion_value = (t_date, )
     ##sql_deletion_value = ('2020-08-01', )
@@ -216,7 +220,7 @@ def get_weekly_ratio():
     sql_query_statement = "SELECT date,w_ct FROM ratio_metrics WHERE YEARWEEK(date) = YEARWEEK(NOW());"
     cursor.execute(sql_query_statement)
     query_results = cursor.fetchall()
-    t_date = datetime.now().strftime("%Y-%m-%d")
+    ##t_date = datetime.now().strftime("%Y-%m-%d")
     
     ratio_sum = 0
     count = 0
@@ -245,9 +249,9 @@ def get_weekly_ratio_list():
 def insert_ratios(wct_ratio, apw_ratio): ##wct = work completed to targeted; apw = aux per work 
     cn = stm.connect_to_db()
     cursor = cn.cursor()
-    sql_insertion_statement = "INSERT INTO ratio_metrics VALUES (NOW(), %s, %s)"
-    ##sql_insertion_statement = "INSERT INTO ratio_metrics VALUES (%s, %s, %s)"
-    sql_vals = (wct_ratio, apw_ratio)
+    ##sql_insertion_statement = "INSERT INTO ratio_metrics VALUES (NOW(), %s, %s)"
+    sql_insertion_statement = "INSERT INTO ratio_metrics VALUES (%s, %s, %s)"
+    sql_vals = (t_date, wct_ratio, apw_ratio)
     ##sql_vals = ('2020-08-01',wct_ratio, apw_ratio)
     cursor.execute(sql_insertion_statement, sql_vals)
     cn.commit()
@@ -257,9 +261,9 @@ def update_ratios():
     cursor = cn.cursor()
     
     sql_query_statement = "SELECT * FROM task_metrics WHERE date = (%s)"
-    t_date = datetime.now().strftime("%Y-%m-%d")
-    sql_vals = (t_date,)
-    ##sql_vals = ('2020-08-01',)
+    ##t_date = datetime.now().strftime("%Y-%m-%d")
+    ##sql_vals = (t_date,)
+    sql_vals = ('2020-08-31',)
     cursor.execute(sql_query_statement, sql_vals)
     query_result = cursor.fetchall()
     wct = 0
@@ -282,7 +286,7 @@ def update_ratios():
 def delete_todays_ratio_metrics():
     cn = stm.connect_to_db()
     cursor = cn.cursor()
-    t_date = datetime.now().strftime("%Y-%m-%d")
+    ##t_date = datetime.now().strftime("%Y-%m-%d")
     sql_deletion_statement = "DELETE FROM ratio_metrics WHERE date = (%s)"
     sql_deletion_value = (t_date, )
     ##sql_deletion_value = ('2020-08-01', )
