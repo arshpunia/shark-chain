@@ -57,6 +57,8 @@ Running this command will also report your completion ratio for today, in additi
 
 You will also see a donut chart displaying the percentage of tasks completed and the percentage you are yet to attack. 
 
+![Output upon completing a task](https://github.com/arshpunia/shark-chain/blob/master/images/CompletingTasks.PNG)
+
 ## Marking an auxiliary task as completed ##
 
 To mark an auxiliary task as complete: 
@@ -71,6 +73,8 @@ As with completed work tasks, you will see some basic metrics showing your perfo
 
 To list all the tasks for today that have not yet been marked as completed: 
 `python SharkCoin.py -q`
+
+![Querying Tasks](https://github.com/arshpunia/shark-chain/blob/master/images/QueryingTasks.PNG)
 
 ## Capturing a thought/task ##
 
@@ -93,6 +97,8 @@ To conduct an analysis of your daily performance, including your completion rati
 
 In addition to the text-based output, one graph is also shown. It displays the trend of your completion ratios throughout the week, a quick, helpful indicator of your performance. 
 
+![Performance Analysis](https://github.com/arshpunia/shark-chain/blob/master/images/Metrics.PNG)
+
 ## Query performance statistics ##
 
 To query your performance metrics for today:
@@ -110,12 +116,15 @@ Now before the crypto utopians come at me with their $10k rigs and hardware wall
 
 ## Metrics ##
 
-shark-chain tries to capture some basic metrics that you can use to track your performance. For example, I use a Tableau dashboard to visualize my weekly performance and productivity trends which I then use to set targets for the upcoming week. Here is a brief description of the metrics that are measured by shark-chain: 
+shark-chain tries to capture some basic metrics that you can use to track your performance. For example, I use a Tableau dashboard (see image) to visualize my weekly performance and productivity trends which I then use to set targets for the upcoming week. Here is a brief description of the metrics that are measured by shark-chain: 
 
 - Work Completed Tasks (wct): A simple ratio of the number of tasks completed to the number of tasks targeted. Probably the most important metric tracked
 - Coins from work: Tracks the number of coins that you "earned" from completing work-related tasks. A fun metric, but certainly not the most useful considering it is not a ratio
 - Coins from auxiliary: Just like "coins from work", except for auxiliary tasks 
 - Time metrics: Tracks the number of tasks completed every hour of the day. In an ideal world, this would be helpful to track my most productive hours. However, I usually take this with some salt as I do not always mark tasks as completed as soon as I finish them, but still great to gather a general sense at the macro level. 
+
+![Visualizing overall metrics in Tableau](https://github.com/arshpunia/shark-chain/blob/master/images/Dashboard.PNG)
+
 
 ## The Road ahead ##
 
